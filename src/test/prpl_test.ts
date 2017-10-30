@@ -12,7 +12,6 @@
  * http://polymer.github.io/PATENTS.txt
  */
 
-import * as capabilities from 'browser-capabilities';
 import {assert} from 'chai';
 import * as express from 'express';
 import * as http from 'http';
@@ -55,7 +54,7 @@ suite('prpl server', function() {
       (path: string, ua?: string, headers?: {[key: string]: string}): Promise<{
         code: number | undefined,
         data: string,
-        headers: {[key: string]: string}
+        headers: http.IncomingHttpHeaders,
       }> => {
         return new Promise((resolve) => {
           const getHeaders = Object.assign({'user-agent': ua || ''}, headers);
@@ -78,7 +77,7 @@ suite('prpl server', function() {
           },
           {
             name: 'es2015',
-            browserCapabilities: ['es2015' as capabilities.BrowserCapability],
+            browserCapabilities: ['es2015'],
           },
         ],
       });
@@ -214,7 +213,7 @@ suite('prpl server', function() {
       test('respects etag request header', async () => {
         const {headers} = await get('/es2015/fragment.html', chrome);
         const {code, data} = await get('/es2015/fragment.html', chrome, {
-          'If-None-Match': headers['etag'],
+          'If-None-Match': headers['etag'] as string,
         });
         assert.equal(code, 304);
         assert.equal(data, '');
@@ -228,7 +227,7 @@ suite('prpl server', function() {
         builds: [
           {
             name: 'es2015',
-            browserCapabilities: ['es2015' as capabilities.BrowserCapability],
+            browserCapabilities: ['es2015'],
           },
         ],
       });
@@ -251,7 +250,7 @@ suite('prpl server', function() {
         builds: [
           {
             name: 'es2015',
-            browserCapabilities: ['es2015' as capabilities.BrowserCapability],
+            browserCapabilities: ['es2015'],
           },
         ],
         unregisterMissingServiceWorkers: false,
@@ -305,7 +304,7 @@ suite('prpl server', function() {
         builds: [
           {
             name: 'es2015',
-            browserCapabilities: ['es2015' as capabilities.BrowserCapability],
+            browserCapabilities: ['es2015'],
           },
         ]
       }));
