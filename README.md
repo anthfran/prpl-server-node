@@ -159,7 +159,7 @@ By default, prpl-server sets the [`Cache-Control`](https://developer.mozilla.org
 
 To change this default for non-entrypoint resources, set the `cacheControl` property in your configuration file, or the `--cache-control` command-line flag, to the desired `Cache-Control` header value. You may want to set `--cache-control=no-cache` during development.
 
-For more advanced caching behavior, use prpl-server as [a library](#as-a-library) and register a middleware that sets the `Cache-Control` header before prpl-server is invoked. If prpl-server sees that the `Cache-Control` header has already been set, it will not modify it. For example, to set year-long caching for images:
+For more advanced caching behavior, [use prpl-server as a library](#as-a-library) with Express and register a middleware that sets the `Cache-Control` header before registering the prpl-server middleware. If prpl-server sees that the `Cache-Control` header has already been set, it will not modify it. For example, to set year-long caching for images:
 
 ```js
 app.get('/images/*', (req, res, next) => {
@@ -171,6 +171,10 @@ app.get('/*', prpl.makeHandler('.', config))
 ```
 
 Choosing the right cache headers for your application can be complex. See [*Caching best practices & max-age gotchas*](https://jakearchibald.com/2016/caching-best-practices/) for one starting point.
+
+## HTTP Errors
+
+By default, if a `404 Not Found` or other HTTP server error occurs, prpl-server will write a minimal `text/plain` response. To serve custom errors, [use prpl-server as a library](#as-a-library) with Express and register an [error-handling middleware](http://expressjs.com/en/guide/using-middleware.html#middleware.error-handling) after registering the prpl-server handler.
 
 ## Rendering for Bots
 
